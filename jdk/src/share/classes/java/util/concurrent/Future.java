@@ -116,6 +116,9 @@ public interface Future<V> {
      * typically because it has already completed normally;
      * {@code true} otherwise
      */
+    /*
+    * 取消任务的执行，接收一个boolean类型的参数，成功取消任务，则返回true，否则返回false。当任务已经完成，已经结束或者因其他原因不能取消时，方法会返回false，表示任务取消失败。当任务未启动调用了此方法，并且结果返回true（取消成功），则当前任务不再运行。如果任务已经启动，会根据当前传递的boolean类型的参数来决定是否中断当前运行的线程来取消当前运行的任务。
+    * */
     boolean cancel(boolean mayInterruptIfRunning);
 
     /**
@@ -124,6 +127,11 @@ public interface Future<V> {
      *
      * @return {@code true} if this task was cancelled before it completed
      */
+    /*
+    * 判断任务在完成之前是否被取消，如果在任务完成之前被取消，则返回true；否则，返回false。
+
+    这里需要注意一个细节：只有任务未启动，或者在完成之前被取消，才会返回true，表示任务已经被成功取消。其他情况都会返回false。
+    * */
     boolean isCancelled();
 
     /**
@@ -135,6 +143,7 @@ public interface Future<V> {
      *
      * @return {@code true} if this task completed
      */
+    // 判断任务是否已经完成，如果任务正常结束、抛出异常退出、被取消，都会返回true，表示任务已经完成。
     boolean isDone();
 
     /**
@@ -148,6 +157,7 @@ public interface Future<V> {
      * @throws InterruptedException if the current thread was interrupted
      * while waiting
      */
+    // 当任务完成时，直接返回任务的结果数据；当任务未完成时，等待任务完成并返回任务的结果数据。
     V get() throws InterruptedException, ExecutionException;
 
     /**
@@ -164,6 +174,7 @@ public interface Future<V> {
      * while waiting
      * @throws TimeoutException if the wait timed out
      */
+    // 当任务完成时，直接返回任务的结果数据；当任务未完成时，等待任务完成，并设置了超时等待时间。在超时时间内任务完成，则返回结果；否则，抛出TimeoutException异常。
     V get(long timeout, TimeUnit unit)
         throws InterruptedException, ExecutionException, TimeoutException;
 }
